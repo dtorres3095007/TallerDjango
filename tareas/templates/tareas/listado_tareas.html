@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+{% block container %}
+
+<h1>Administrador de Tareas</h1>
+
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
+{% csrf_token %}
+<br>
+<button class="btn btn-primary glyphicon glyphicon-plus"> Nueva</button>
+
+<br><br>
+<table class="table table-hover table-bordered">
+<tr><th class="warning" colspan="6">Titulo Lista: {{ lista.titulo_lista }}</th></tr>
+  <tr class="warning"><th>Titulo</th><th>Fecha Creacion</th><th>Fecha Modificacion</th><th>Descripcion</th><th>Estado</th><th>*****</th></tr>
+{% for l in lista.tareas_set.all %}
+  <tr><td>{{l.titulo_tarea }}</td><td>{{l.fecha_creacion_tarea }}</td><td>{{l.fecha_modificacion_tarea }}</td><td>{{l.descripcion_tarea }}</td><td>{{l.estado_tarea }}</td><td><button class="btn btn-warning glyphicon glyphicon-wrench"></button>
+  <button class="btn btn-success glyphicon glyphicon-ok"></button>  <button class="btn btn-danger glyphicon glyphicon-remove"></button> </td></tr>
+{% endfor %}
+</table>
+
+{% endblock container %}

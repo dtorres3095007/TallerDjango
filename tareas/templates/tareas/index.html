@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block container %}
+    <h1>{{ algo }}</h1>
+    {% if listado %}
+    <h1>Administrador de Lista</h1>
+
+    <a class="btn btn-primary" href="/tareas/crear_lista/">Agregar</a>
+    <button class="btn btn-success">Modificar</button>
+    <button class="btn btn-danger">Eliminar</button>
+    <br><br>
+    <table class="table">
+
+      <tr><th>Titulo</th><th>Fecha Creacion</th></tr>
+    {% for l in listado %}
+      <tr><td><a href="/tareas/{{ l.id }}/">{{ l.titulo_lista }}</a></td><td>{{ l.fecha_lista}}</td></tr>
+    {% endfor %}
+    {% else %}
+        <p>No polls are available.</p>
+    {% endif %}
+
+{% endblock container %}

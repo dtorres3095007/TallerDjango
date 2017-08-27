@@ -1,0 +1,11 @@
+
+{% extends "base.html" %}
+
+{% block container %}
+<form action="" method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-primary glyphicon glyphicon-plus" type="submit" value="Agregar"/>
+ </form>
+{% endblock container %}
+
