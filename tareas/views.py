@@ -25,6 +25,18 @@ class IndexView(generic.ListView):
 
 class ListaCreateView(generic.CreateView):
     model = Lista
-    # fields = ('question_text',)
     form_class = ListaForm
     success_url = reverse_lazy('tareas:index')
+  
+
+class ListaUpdateView(generic.UpdateView):
+    model = Lista
+    form_class = ListaForm
+    success_url = reverse_lazy('tareas:index')
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        print("kwargs = %s" % self.kwargs)
+        self.object.titulo_lista = self.object.titulo_lista
+        self.object.save()
+        return super(generic.edit.ModelFormMixin, self).form_valid(form)
