@@ -13,8 +13,8 @@
 <tr><th class="warning" colspan="6">Titulo Lista: {{ lista.titulo_lista }}</th></tr>
   <tr class="warning"><th>Titulo</th><th>Fecha Creacion</th><th>Fecha Modificacion</th><th>Descripcion</th><th>Estado</th><th>*****</th></tr>
 {% for l in lista.tareas_set.all %}
-  <tr><td>{{l.titulo_tarea }}</td><td>{{l.fecha_creacion_tarea }}</td><td>{{l.fecha_modificacion_tarea }}</td><td>{{l.descripcion_tarea }}</td><td>{{l.estado_tarea }}</td><td><button class="btn btn-warning glyphicon glyphicon-wrench"></button>
-  <button class="btn btn-success glyphicon glyphicon-ok"></button>  <button class="btn btn-danger glyphicon glyphicon-remove"></button> </td></tr>
+  <tr><td>{{l.titulo_tarea }}</td><td>{{l.fecha_creacion_tarea }}</td><td>{{l.fecha_modificacion_tarea }}</td><td>{{l.descripcion_tarea }}</td><td>{{l.estado_tarea }}</td><td><a class="btn btn-warning glyphicon glyphicon-wrench" href="/tareas/{{ l.id }}/modificar_tarea"></a>
+  <button class="btn btn-success glyphicon glyphicon-ok"></button>  <a class="btn btn-danger glyphicon glyphicon-remove" href="/tareas/{{ l.id }}/eliminar_tarea"></a> </td></tr>
 {% endfor %}
 </table>
 

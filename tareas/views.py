@@ -4,6 +4,7 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from .models import Lista, Tareas
 from django.views import generic
+from django.contrib.messages.views import SuccessMessageMixin
 from .forms import ListaForm, TareasForm
 
 def listaTareas(request, l_id):
@@ -23,11 +24,11 @@ class IndexView(generic.ListView):
         return Lista.objects.all()
 
 
-class ListaCreateView(generic.CreateView):
+class ListaCreateView(SuccessMessageMixin, generic.CreateView):
     model = Lista
     form_class = ListaForm
     success_url = reverse_lazy('tareas:index')
-  
+    success_message = "Lista Creada Con Exito"
 
 class ListaUpdateView(generic.UpdateView):
     model = Lista
@@ -52,7 +53,33 @@ class ListaDelete(generic.DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-class TareasCreateView(generic.CreateView):
+class TareasCreateView(SuccessMessageMixin, generic.CreateView):
     model = Tareas
     form_class = TareasForm
     success_url = reverse_lazy('tareas:index')
+    success_message = "Tarea Creada Con Exito"
+
+class TareasUpdateView(generic.UpdateView):
+    model = Tareas
+    form_class = TareasForm
+
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        print("kwargs = %s" % self.kwargs)
+        self.object.titulo_tarea = self.object.titulo_tarea
+        self.object.estado_tarea = self.object.estado_tarea
+        self.object.id_lista = self.object.id_lista
+        self.object.descripcion_tarea = self.object.descripcion_tarea
+        self.object.save()
+        return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': self.object.id_lista_id}))
+
+
+class TareasDelete (generic.DeleteView):
+    model = Tareas
+
+    def delete(self, request, *args, **kwargs):
+        id_lis = self.get_object().id_lista_id
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': id_lis}))
+    

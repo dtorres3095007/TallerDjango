@@ -10,4 +10,6 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/modificar_lista$', views.ListaUpdateView.as_view(), name='modificar_lista'),
     url(r'^(?P<pk>[0-9]+)/eliminar_lista$', views.ListaDelete.as_view(), name='eliminar_lista'),
     url(r'^crear_tarea/$', views.TareasCreateView.as_view(), name='crear_tarea'),
+    url(r'^(?P<pk>[0-9]+)/modificar_tarea$', views.TareasUpdateView.as_view(), name='modificar_tarea'),
+    url(r'^(?P<pk>[0-9]+)/eliminar_tarea$', views.TareasDelete.as_view(), name='eliminar_tarea'),
 ]
