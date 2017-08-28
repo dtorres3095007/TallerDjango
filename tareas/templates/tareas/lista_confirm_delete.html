@@ -1,0 +1,28 @@
+
+{% extends "base.html" %}
+
+{% block container %}
+<form action="" method="post">{% csrf_token %}
+
+ <div class="panel panel-default active" id="panelvisitante">
+
+ <div class="panel-heading" style="background-color: #A93226;color: white;font-weight: bold;">
+   <center> 
+   <h3 class="panel-title"><span class="glyphicon glyphicon-remove"></span> Panel de Administracion</h3>
+   </center>
+ </div>
+
+ <div class="panel-body" style="font-weight: bold;text-align: center;">
+    <p>Estas Seguro que Deseas Eliminar El resgistro "{{ object }}"?</p>
+ </div> 
+
+ <div class="panel-footer danger" id="foterpanel">
+     <input type="submit" value="Eliminar" class="btn btn-danger glyphicon glyphicon-remove" />
+       <a class="btn btn-default" href="/tareas/">Cancelar</a>
+ </div>  
+
+ </div>
+                            
+                      
+</form>
+{% endblock container %}

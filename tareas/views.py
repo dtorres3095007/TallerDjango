@@ -1,10 +1,10 @@
 from django.http import Http404
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse, reverse_lazy
 from .models import Lista, Tareas
 from django.views import generic
-from .forms import ListaForm
+from .forms import ListaForm, TareasForm
 
 def listaTareas(request, l_id):
     try:
@@ -40,3 +40,19 @@ class ListaUpdateView(generic.UpdateView):
         self.object.titulo_lista = self.object.titulo_lista
         self.object.save()
         return super(generic.edit.ModelFormMixin, self).form_valid(form)
+
+
+class ListaDelete(generic.DeleteView):
+    model = Lista
+    success_url = reverse_lazy('tareas:index')
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+class TareasCreateView(generic.CreateView):
+    model = Tareas
+    form_class = TareasForm
+    success_url = reverse_lazy('tareas:index')

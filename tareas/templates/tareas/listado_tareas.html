@@ -2,12 +2,11 @@
 {% extends 'base.html' %}
 {% block container %}
 
-<h1>Administrador de Tareas</h1>
+<h1><span class="glyphicon glyphicon-th-list"> </span> Administrador de Tareas</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 {% csrf_token %}
-<br>
-<button class="btn btn-primary glyphicon glyphicon-plus"> Nueva</button>
+
 
 <br><br>
 <table class="table table-hover table-bordered">

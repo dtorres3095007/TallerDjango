@@ -1,46 +1,19 @@
 {% extends 'base.html' %}
 {% block container %}
     <h1>{{ algo }}</h1>
+    <h1><span class="glyphicon glyphicon-list-alt"> </span> Administrador de Listas</h1>
+<bR>
+    <span></span><a class="btn btn-primary " href="/tareas/crear_lista/"><span class="glyphicon glyphicon-plus"></span>Agregar Lista</a></span>
+   <a class="btn btn-success" href="/tareas/crear_tarea/"> <span class="glyphicon glyphicon-th-list"></span> Nueva Tarea</a>
     {% if listado %}
-    <h1>Administrador de Lista</h1>
-
-    <a class="btn btn-primary glyphicon glyphicon-plus" href="/tareas/crear_lista/">Agregar</a>
-   
-
     <br><br>
     <table class="table table table-hover table-bordered">
 
       <tr><th>Titulo</th><th>Fecha Creacion</th><th>*****</th></tr>
     {% for l in listado %}
-      <tr><td><a href="/tareas/{{ l.id }}/">{{ l.titulo_lista }}</a></td><td>{{ l.fecha_lista}}</td><td><a class="btn btn-success glyphicon glyphicon-wrench" href="/tareas/{{ l.id }}/modificar_lista"></a>   <a class="btn btn-danger glyphicon glyphicon-remove" data-toggle="modal" data-target="#myModal" ></a></td></tr>
+      <tr><td><a href="/tareas/{{ l.id }}/">{{ l.titulo_lista }}</a></td><td>{{ l.fecha_lista}}</td><td><a class="btn btn-success glyphicon glyphicon-wrench" href="/tareas/{{ l.id }}/modificar_lista"></a>   <a class="btn btn-danger glyphicon glyphicon-remove" href="/tareas/{{ l.id }}/eliminar_lista"></a></td></tr>
     {% endfor %}
     {% else %}
-        <p>No polls are available.</p>
+        <p>No hay Listas Guardadas.</p>
     {% endif %}
-
-<!-- Trigger the modal with a button -->
-
-
-<!-- Modal -->
-<div id="myModal" class="modal fade" role="dialog">
-  <div class="modal-dialog">
-
-    <!-- Modal content-->
-    <div class="modal-content">
-      <div class="modal-header text-center danger" style="background-color: #A93226;color: white;font-weight: bold;">
-        <button type="button" class="close" data-dismiss="modal">&times;</button>
-        <h4 class="modal-title"> <span class="glyphicon glyphicon-remove"></span> Panel de Administracion</h4>
-      </div>
-      <div class="modal-body" style="font-weight: bold;text-align: center;">
-        <p>Esta Seguro que desea Eliminar la Tarea..?</p>
-      </div>
-      <div class="modal-footer">
-       <button type="button" class="btn btn-danger" data-dismiss="modal">Aceptar</button>
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
-    </div>
-
-  </div>
-</div>
-
 {% endblock container %}
