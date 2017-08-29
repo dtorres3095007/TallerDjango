@@ -6,6 +6,7 @@ from .models import Lista, Tareas
 from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import ListaForm, TareasForm
+from django.utils import timezone
 
 def listaTareas(request, l_id):
     try:
@@ -72,7 +73,7 @@ class TareasUpdateView(generic.UpdateView):
         self.object.descripcion_tarea = self.object.descripcion_tarea
         self.object.save()
         return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': self.object.id_lista_id}))
-
+    
 
 class TareasDelete (generic.DeleteView):
     model = Tareas
@@ -83,3 +84,29 @@ class TareasDelete (generic.DeleteView):
         self.object.delete()
         return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': id_lis}))
     
+
+class TareasPendientesView(generic.ListView):
+    template_name = 'tareas/reportes.html'
+    context_object_name = 'lista'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Tareas.objects.filter(estado_tarea="False")
+
+
+class TareasTerminadasMesView(generic.ListView):
+    template_name = 'tareas/reportes.html'
+    context_object_name = 'lista'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Tareas.objects.filter(estado_tarea="True", fecha_modificacion_tarea__month=timezone.now().month)
+
+
+class TareasPendientesMesView(generic.ListView):
+    template_name = 'tareas/reportes.html'
+    context_object_name = 'lista'
+
+    def get_queryset(self):
+        """Return the last five published questions."""
+        return Tareas.objects.filter(estado_tarea="False", fecha_modificacion_tarea__month=timezone.now().month)

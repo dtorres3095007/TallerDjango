@@ -22,4 +22,3 @@ class TareasForm(forms.ModelForm):
     class Meta:
         model = models.Tareas
         fields = ['id_lista','titulo_tarea','estado_tarea','descripcion_tarea']
-
