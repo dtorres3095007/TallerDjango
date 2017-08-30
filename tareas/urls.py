@@ -14,4 +14,5 @@ urlpatterns = [
     url(r'^(?P<pk>[0-9]+)/eliminar_tarea$', views.TareasDelete.as_view(), name='eliminar_tarea'),
     url(r'^pendientes/$', views.TareasPendientesView.as_view(), name='pendientes'),
     url(r'^terminadas/$', views.TareasTerminadasMesView.as_view(), name='terminadas'),
+    url(r'^pendientes_mes/$', views.TareasPendientesMesView.as_view(), name='pendientes_mes'),
 ]

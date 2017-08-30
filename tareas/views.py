@@ -109,4 +109,4 @@ class TareasPendientesMesView(generic.ListView):
 
     def get_queryset(self):
         """Return the last five published questions."""
-        return Tareas.objects.filter(estado_tarea="False", fecha_modificacion_tarea__month=timezone.now().month)
+        return Tareas.objects.filter(estado_tarea="False", fecha_modificacion_tarea__month=timezone.now().month-1)
