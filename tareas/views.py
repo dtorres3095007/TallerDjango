@@ -73,7 +73,7 @@ class TareasUpdateView(generic.UpdateView):
         self.object.descripcion_tarea = self.object.descripcion_tarea
         self.object.save()
         return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': self.object.id_lista_id}))
-    
+   
 
 class TareasDelete (generic.DeleteView):
     model = Tareas
@@ -107,5 +107,9 @@ class TareasPendientesMesView(generic.ListView):
 
     def get_queryset(self):
         start_date = datetime.date(2000, 1, 1)
-        end_date = datetime.date(timezone.now().year, timezone.now().month-1, timezone.now().day)
+        
+        if timezone.now().month-1 == 2 and (timezone.now().day == 29 or timezone.now().day == 30 or timezone.now().day == 31):
+            end_date = datetime.date(timezone.now().year, timezone.now().month-1, 28)
+        else:
+            end_date = datetime.date(timezone.now().year, timezone.now().month-1, timezone.now().day)
         return Tareas.objects.filter(estado_tarea="False", fecha_creacion_tarea__range=(start_date, end_date))
