@@ -7,7 +7,7 @@ from django.views import generic
 from django.contrib.messages.views import SuccessMessageMixin
 from .forms import ListaForm, TareasForm
 from django.utils import timezone
-
+import datetime
 def listaTareas(request, l_id):
     try:
         lista= Lista.objects.get(pk=l_id)
@@ -90,7 +90,6 @@ class TareasPendientesView(generic.ListView):
     context_object_name = 'lista'
 
     def get_queryset(self):
-        """Return the last five published questions."""
         return Tareas.objects.filter(estado_tarea="False")
 
 
@@ -99,7 +98,6 @@ class TareasTerminadasMesView(generic.ListView):
     context_object_name = 'lista'
 
     def get_queryset(self):
-        """Return the last five published questions."""
         return Tareas.objects.filter(estado_tarea="True", fecha_modificacion_tarea__month=timezone.now().month)
 
 
@@ -108,5 +106,6 @@ class TareasPendientesMesView(generic.ListView):
     context_object_name = 'lista'
 
     def get_queryset(self):
-        """Return the last five published questions."""
-        return Tareas.objects.filter(estado_tarea="False", fecha_modificacion_tarea__month=timezone.now().month-1)
+        start_date = datetime.date(2000, 1, 1)
+        end_date = datetime.date(timezone.now().year, timezone.now().month-1, timezone.now().day)
+        return Tareas.objects.filter(estado_tarea="False", fecha_creacion_tarea__range=(start_date, end_date))
