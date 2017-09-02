@@ -3,6 +3,7 @@
     <h1>{{ algo }}</h1>
     <h1><span class="glyphicon glyphicon-list-alt"> </span> Administrador de Listas</h1>
 <bR>
+{% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
     <span></span><a class="btn btn-primary " href="/tareas/crear_lista/"><span class="glyphicon glyphicon-plus"></span>Agregar Lista</a></span>
    <a class="btn btn-success" href="/tareas/crear_tarea/"> <span class="glyphicon glyphicon-th-list"></span> Nueva Tarea</a>
     {% if listado %}

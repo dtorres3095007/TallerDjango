@@ -8,12 +8,35 @@ from django.contrib.messages.views import SuccessMessageMixin
 from .forms import ListaForm, TareasForm
 from django.utils import timezone
 import datetime
+from django.contrib import messages
+
 def listaTareas(request, l_id):
     try:
-        lista= Lista.objects.get(pk=l_id)
+        lista = Lista.objects.get(pk=l_id)
     except lista.DoesNotExist:
         raise Http404("La Lista No existe")
     return render(request, 'tareas/listado_tareas.html', {'lista': lista})
+
+def DesmarcarTarea(request, l_id):
+    try:
+        fecha = timezone.now() - datetime.timedelta(days=30)
+        tarea = Tareas.objects.get(pk=l_id)
+    except tarea.DoesNotExist:
+        raise Http404("La Tarea no exite")
+    else:
+        if tarea.fecha_creacion_tarea < fecha and tarea.estado_tarea == True:
+            messages.add_message(request, messages.ERROR, 'La tarea Tiene mas de 30 dias de CREADA y esta TERMINADA.')
+            return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': tarea.id_lista_id}))
+        else:
+            if tarea.estado_tarea == True:
+                tarea.estado_tarea = False
+                tarea.save()
+                messages.add_message(request, messages.ERROR, 'Tarea Marcada como Pendiente.')
+            else:
+                tarea.estado_tarea = True
+                tarea.save()
+                messages.add_message(request, messages.SUCCESS, 'Tarea Marcada como Terminada.')
+            return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': tarea.id_lista_id}))
 
 
 class IndexView(generic.ListView):
@@ -38,10 +61,10 @@ class ListaUpdateView(generic.UpdateView):
 
     def form_valid(self, form):
         self.object = form.save(commit=False)
-        print("kwargs = %s" % self.kwargs)
         self.object.titulo_lista = self.object.titulo_lista
         self.object.save()
-        return super(generic.edit.ModelFormMixin, self).form_valid(form)
+        messages.add_message(self.request, messages.SUCCESS, 'Lista Modificada con exito.')
+        return HttpResponseRedirect(self.get_success_url())
 
 
 class ListaDelete(generic.DeleteView):
@@ -51,6 +74,7 @@ class ListaDelete(generic.DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
+        messages.add_message(self.request, messages.SUCCESS, 'Lista Eliminada con exito.')
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -60,10 +84,11 @@ class TareasCreateView(SuccessMessageMixin, generic.CreateView):
     success_url = reverse_lazy('tareas:index')
     success_message = "Tarea Creada Con Exito"
 
+
 class TareasUpdateView(generic.UpdateView):
     model = Tareas
     form_class = TareasForm
-
+    
     def form_valid(self, form):
         self.object = form.save(commit=False)
         print("kwargs = %s" % self.kwargs)
@@ -72,6 +97,7 @@ class TareasUpdateView(generic.UpdateView):
         self.object.id_lista = self.object.id_lista
         self.object.descripcion_tarea = self.object.descripcion_tarea
         self.object.save()
+        messages.add_message(self.request, messages.SUCCESS, 'Tarea Modificada con exito.')
         return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': self.object.id_lista_id}))
    
 
@@ -82,6 +108,7 @@ class TareasDelete (generic.DeleteView):
         id_lis = self.get_object().id_lista_id
         self.object = self.get_object()
         self.object.delete()
+        messages.add_message(self.request, messages.SUCCESS, 'Tarea Eliminada con exito.')
         return HttpResponseRedirect(reverse('tareas:listado_tareas', kwargs={'l_id': id_lis}))
     
 
@@ -106,10 +133,5 @@ class TareasPendientesMesView(generic.ListView):
     context_object_name = 'lista'
 
     def get_queryset(self):
-        start_date = datetime.date(2000, 1, 1)
-        
-        if timezone.now().month-1 == 2 and (timezone.now().day == 29 or timezone.now().day == 30 or timezone.now().day == 31):
-            end_date = datetime.date(timezone.now().year, timezone.now().month-1, 28)
-        else:
-            end_date = datetime.date(timezone.now().year, timezone.now().month-1, timezone.now().day)
-        return Tareas.objects.filter(estado_tarea="False", fecha_creacion_tarea__range=(start_date, end_date))
+        fecha = timezone.now() - datetime.timedelta(days=30)
+        return Tareas.objects.filter(estado_tarea="False", fecha_creacion_tarea__lt=fecha)
